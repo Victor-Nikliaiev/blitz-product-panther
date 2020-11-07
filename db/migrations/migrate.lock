@@ -1,7 +1,3 @@
 # Prisma Migrate lockfile v1
 
-20201105200646-first-migrate
-20201105200907-add-product
-20201105223336-add-product-feature
-20201105224751-add-product-feature
-20201105231023-add-product-and-request-relations
+20201107055349-first-setup-on-postgres
