@@ -4,12 +4,16 @@ import { Link, useRouter, useQuery, useParam, BlitzPage, useMutation } from "bli
 import getProduct from "app/products/queries/getProduct"
 import deleteProduct from "app/products/mutations/deleteProduct"
 import { requests } from "cypress/types/sinon"
+import voteOnRequest from "app/requests/mutations/voteOnRequest"
+import { useCurrentUser } from "app/hooks/useCurrentUser"
+const currentUser = useCurrentUser()
 
 export const Product = () => {
   const router = useRouter()
   const productId = useParam("productId", "number")
   const [product] = useQuery(getProduct, { where: { id: productId } })
   const [deleteProductMutation] = useMutation(deleteProduct)
+  const [voteOnRequestMutation] = useMutation(voteOnRequest)
 
   return (
     <div>
@@ -33,7 +37,25 @@ export const Product = () => {
           return (
             <li className="p-4 shadow rounded flex flex-row space-x-4 bg-white">
               <div className="border rounded">
-                <button className="flex flex-col space-y-4 p-3 rounded shadow-sm hover:bg-yellow-200">
+                <button
+                  onClick={async () => {
+                    await voteOnRequestMutation({
+                      data: {
+                        request: {
+                          connect: {
+                            id: request.id,
+                          },
+                        },
+                        user: {
+                          connect: {
+                            id: currentUser?.id,
+                          },
+                        },
+                      },
+                    })
+                  }}
+                  className="flex flex-col space-y-4 p-3 rounded shadow-sm hover:bg-yellow-200"
+                >
                   <span>123</span> <span>Vote</span>
                 </button>
               </div>
